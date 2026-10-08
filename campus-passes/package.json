@@ -1,0 +1,36 @@
+{
+  "name": "campus-passes",
+  "version": "1.0.0",
+  "description": "Campus event ticketing with emailed signed QR tickets and an organizer check-in scanner",
+  "main": "src/server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch src/server.js",
+    "test": "node --disable-warning=ExperimentalWarning --test",
+    "mail:test": "node scripts/send-test-email.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "compression": "^1.8.2",
+    "dotenv": "^18.0.6",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.1",
+    "jsqr": "^1.4.0",
+    "nodemailer": "^10.0.16",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "mailparser": "^3.9.37",
+    "pngjs": "^7.0.0",
+    "smtp-server": "^3.19.18"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22.13"
+  }
+}

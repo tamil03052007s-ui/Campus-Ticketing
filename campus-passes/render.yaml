@@ -1,0 +1,54 @@
+# Render "Blueprint": creates the whole web service from this file.
+# Render dashboard -> New -> Blueprint -> pick your GitHub repo. Render asks you for the
+# values marked `sync: false` (secrets and settings only you know) before it deploys.
+#
+# The database is a single SQLite file, so the service needs a persistent disk, and disks
+# need a paid instance. Check Render's pricing page for the current price of "starter".
+#
+# Want a free demo instead? Change `plan: starter` to `plan: free` and delete the `disk:` block.
+# Events are re-created from events.json on every restart, but registrations are LOST whenever
+# the free instance restarts, which breaks any ticket that was already emailed.
+
+services:
+  - type: web
+    name: campus-passes
+    runtime: node
+    plan: starter
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /healthz
+    disk:
+      name: passes-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: DB_PATH
+        value: /var/data/tickets.db
+      - key: TRUST_PROXY
+        value: "1"
+      - key: ORG_NAME
+        value: VIT
+      # Render generates this once and keeps it. Never change it after tickets have been emailed.
+      - key: TICKET_SIGNING_SECRET
+        generateValue: true
+      # Passcode organizers type at /organizer.html
+      - key: ORGANIZER_PASSCODE
+        sync: false
+      # Only these email domains may register, e.g. vitstudent.ac.in,vit.ac.in (confirm yours)
+      - key: ALLOWED_EMAIL_DOMAINS
+        sync: false
+      # Email provider (see README): host, port, login, password/API key, and a verified From address
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: MAIL_FROM
+        sync: false
